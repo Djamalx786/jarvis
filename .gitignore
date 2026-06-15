@@ -1,0 +1,29 @@
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets / environment
+.env
+credentials.json
+token.json
+
+# RAG vector store (rebuild with `python -c "from src.rag import build_db; build_db()"`)
+memory/chroma/
+
+# Generated artifacts
+data/exports/*.pdf
+data/state.json
+data/voice_*.ogg
+data/voice_*.wav
+voice.ogg
+voice.wav
+
+# LangGraph plan checkpoints (runtime state)
+data/checkpoints.sqlite
+data/checkpoints.sqlite-*
+
+# Agent-written memory notes (grow at runtime; rebuilt into the RAG index on boot)
+data/notes/memory.txt

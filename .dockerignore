@@ -1,0 +1,20 @@
+# Keep secrets and local-only artifacts out of the image.
+# Credentials are supplied at runtime via environment variables (see src/startup.py).
+.env
+credentials.json
+token.json
+
+.git
+.venv
+__pycache__/
+*.pyc
+
+# Rebuilt at runtime / runtime state
+memory/chroma/
+data/checkpoints.sqlite
+data/state.json
+data/exports/*.pdf
+data/voice_*.ogg
+data/voice_*.wav
+voice.ogg
+voice.wav

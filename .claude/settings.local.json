@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/pip list *)",
+      "Bash(.venv/bin/python --version)",
+      "Bash(env)",
+      "Bash(python3 -c \"import google_auth_oauthlib\")",
+      "Bash(.venv/bin/python -c \"import google_auth_oauthlib; print\\('ok'\\)\")",
+      "Bash(.venv/bin/python -m ensurepip --version)",
+      "Bash(uv pip *)",
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(.venv/bin/python *)",
+      "Bash(pdftoppm -png -r 100 data/exports/weekplan_2026-24.pdf /tmp/weekplan_preview)",
+      "Read(//tmp/**)",
+      "Bash(pdfinfo data/exports/*.pdf)",
+      "Bash(pdftoppm -png -r 100 data/exports/*.pdf /tmp/weekplan_v2)",
+      "Bash(pdftoppm -png -r 100 data/exports/*.pdf /tmp/weekplan_v3)",
+      "Bash(pdftoppm -png -r 150 data/exports/*.pdf /tmp/weekplan_v4)",
+      "Bash(pdftoppm -png -r 150 -f 1 -l 1 -x 950 -y 0 -W 800 -H 250 data/exports/weekplan_2026-24.pdf /tmp/header_v5)",
+      "Bash(pdftoppm -png -r 150 -f 1 -l 1 -x 950 -y 0 -W 800 -H 150 data/exports/weekplan_2026-24.pdf /tmp/header_v6)",
+      "Bash(pdftoppm -png -r 110 data/exports/weekplan_2026-24.pdf /tmp/wp_new)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(echo \"uv exit $?\")",
+      "Bash(VIRTUAL_ENV=.venv uv pip install \"python-telegram-bot[job-queue]==22.7\")",
+      "Bash(echo \"grep exit: $? \\(1 = none found, good\\)\")",
+      "Bash(git --version)",
+      "Bash(git config *)",
+      "Bash(gh auth *)",
+      "Bash(timeout 8 ssh -T -o StrictHostKeyChecking=no git@github.com)",
+      "Bash(git -C /home/djamal/agents/life-os-agent rev-parse --is-inside-work-tree)",
+      "Read(//home/djamal/agents/**)",
+      "Read(//home/djamal/**)",
+      "Bash(git check-ignore *)",
+      "Bash(grep -iE '\\\\.env$|credentials\\\\.json|token\\\\.json')",
+      "Bash(git ls-remote *)",
+      "Bash(VIRTUAL_ENV=.venv uv pip install langgraph-checkpoint-sqlite)",
+      "Bash(git remote *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
+    ]
+  }
+}

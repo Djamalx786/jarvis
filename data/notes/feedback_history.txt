@@ -1,0 +1,25 @@
+# Feedback auf bisherige Pläne — Der Agent soll daraus lernen
+
+## Generelles Feedback
+
+- Pläne waren zu generisch, zu wenig persönlich
+- Sport war falsch geplant: Agent hat Kraftsport eingebaut, aber das ist momentan nicht erlaubt
+- Jeden Tag gleich → langweilig. Abwechslung ist wichtig
+- Mittagspause gefehlt (unter der Woche bei BMW Kantine, am Wochenende selber)
+- Abends zu viel eingeplant — max 1h produktiv, und nicht jeden Abend
+- Wochenende hatte keine Struktur, war nur "frei"
+- Koran lesen und Elternbesuch waren nie eingeplant
+- Plattfuß-Übungen wurden nie erwähnt
+- Handy-weglegen Reminder fehlte
+- BMW Arbeitszeit (7:30-16:30) war nicht als fester Block
+- Arbeitsweg (je 1h) wurde ignoriert
+- "BMW Vorbereitung" als Label erzeugt Druck → besser "KI Skills" oder "Lernen" nennen
+
+## Spezifische Korrekturen
+
+- Freitag Abend soll IMMER frei sein, nie produktiv
+- Fahrrad zur Arbeit nur 1-2x pro Woche, nicht jeden Tag
+- Abendessen mit Frau (18:30-20:30) ist nicht verschiebbar
+- Sonntag Nachmittag = Elternbesuch, nicht für Projekte blocken
+- Samstag Morgen = Koran lesen, dann produktiv
+- Aufräumen lieber Freitag Abend oder Samstag, nicht unter der Woche

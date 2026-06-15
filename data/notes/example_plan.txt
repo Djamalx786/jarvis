@@ -1,0 +1,93 @@
+# Beispiel Wochenplan — Djamals ideale Woche
+
+Dieser Plan dient als Vorlage für den Life OS Agent.
+Neue Pläne sollen diesem Stil, Rhythmus und dieser Struktur folgen.
+
+## Montag
+
+06:00  Aufstehen, Morgenroutine
+06:30  U-Bahn zur Arbeit
+07:30  BMW — Arbeitsbeginn
+16:30  Feierabend, U-Bahn nach Hause
+17:30  Ankommen, kurz ausruhen
+18:00  Plattfuß-Übungen & Dehnen (20 min)
+18:30  Gemeinsam kochen + Abendessen mit Frau
+20:30  Kurz Life OS Agent weiterentwickeln (1h max)
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Dienstag
+
+06:00  Aufstehen, Morgenroutine
+06:30  U-Bahn zur Arbeit
+07:30  BMW — Arbeitsbeginn
+16:30  Feierabend, U-Bahn nach Hause
+17:30  Ankommen, entspannter Spaziergang (30 min)
+18:30  Gemeinsam kochen + Abendessen mit Frau
+20:30  KI-Tutorials / Videos schauen (1h)
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Mittwoch
+
+06:00  Aufstehen, Morgenroutine
+06:30  Fahrrad zur Arbeit (40 min Fahrt, entspannt)
+07:30  BMW — Arbeitsbeginn
+16:30  Feierabend, Fahrrad nach Hause
+17:30  Ankommen, Duschen
+18:00  Plattfuß-Übungen & Dehnen (20 min)
+18:30  Gemeinsam kochen + Abendessen mit Frau
+20:30  Freier Abend — bewusst nichts planen
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Donnerstag
+
+06:00  Aufstehen, Morgenroutine
+06:30  U-Bahn zur Arbeit
+07:30  BMW — Arbeitsbeginn
+16:30  Feierabend, U-Bahn nach Hause
+17:30  Ankommen, kurz ausruhen
+18:00  Life OS Agent Feature bauen (1h)
+19:00  Gemeinsam kochen + Abendessen mit Frau
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Freitag
+
+06:00  Aufstehen, Morgenroutine
+06:30  U-Bahn zur Arbeit
+07:30  BMW — Arbeitsbeginn
+16:30  Feierabend, U-Bahn nach Hause
+17:30  Ankommen — Freitag Abend bewusst frei!
+18:00  Entspannter Spaziergang oder Fahrrad mit Frau
+19:00  Gemeinsam kochen + gemütliches Abendessen
+21:00  Aufräumen / Haushalt (30 min)
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Samstag
+
+08:00  Ausschlafen, gemütliches Frühstück
+09:00  Koran lesen (30-45 min)
+10:00  Life OS Agent oder KI Skills lernen (2h)
+12:00  Mittagessen
+13:00  Plattfuß-Übungen & Dehnen (20 min)
+14:00  Unternehmung mit Frau (Ausflug, Stadt, Café)
+18:00  Gemeinsam kochen + Abendessen
+20:00  Entspannt zusammen Film/Serie
+22:45  Handy weglegen
+23:00  Schlafen
+
+## Sonntag
+
+08:00  Ausschlafen, gemütliches Frühstück
+09:30  KI Skills lernen oder Life OS Agent (2h)
+12:00  Mittagessen + Vorbereitung Elternbesuch
+13:00  Plattfuß-Übungen & Dehnen (20 min)
+14:00  Eltern besuchen (Frau kommt mit)
+18:00  Zurück, Abendessen
+19:00  Woche planen mit Life OS Agent
+20:00  Klamotten vorbereiten, Tasche packen für Montag
+22:45  Handy weglegen
+23:00  Schlafen

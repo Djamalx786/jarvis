@@ -1,0 +1,90 @@
+# Über Djamal Halim — Persönliche Wissensbasis
+
+## Persönliches
+
+Name: Djamal Halim. Wohnt in München, Deutschland. Verheiratet. Muslim.
+Hat seinen Master in Elektrotechnik erfolgreich abgeschlossen.
+Hat ein Praktikum bei BMW in den USA gemacht (ADAS / Autonomes Fahren, Teaneck New Jersey).
+Startet in 3 Wochen vollzeit bei BMW als KI-Spezialist.
+
+## Beruf & Karriere
+
+BMW Arbeitszeiten: 7:30–16:30 Uhr.
+Arbeitsweg: 1 Stunde door-to-door. Meistens U-Bahn (40 min), alternativ Fahrrad (40 min + 20 min duschen).
+Aufstehen um 6:00 Uhr, 30 Minuten Morgenroutine, um 6:30 Uhr los.
+Zuhause um ca. 17:30 Uhr.
+
+Karriereziele: Schnell Verantwortung übernehmen, steile Lernkurve. Langfristig nicht nur programmieren, sondern auch Verantwortung für Projekte und Teams.
+Interessiert an: KI, Agenten-Systeme, RAG, LangGraph, Autonomes Fahren, Robotik.
+
+## Tagesablauf (Werktag bei BMW)
+
+06:00  Aufstehen, Morgenroutine (30 min)
+06:30  Los zur Arbeit (U-Bahn, 1h)
+07:30  Arbeitsbeginn BMW
+16:30  Feierabend
+17:30  Zuhause ankommen, erstmal ankommen und essen
+18:30  Evtl. nochmal kurz was Produktives (Life OS Agent oder KI lernen)
+19:30  Gemeinsam kochen und Abendessen mit Frau (abwechselnd wer kocht)
+22:30  Handy weglegen (15 min vor Schlaf)
+23:00  Schlafen
+
+## Schlafrhythmus
+
+Schlafen: 23:00 Uhr. Aufstehen: 6:00 Uhr. 7 Stunden Schlaf.
+Vor dem Schlafen 15 Minuten kein Handy — das ist ein Ziel das er einhalten möchte.
+Neigt dazu abends am Handy in Rabbit Holes zu fallen (YouTube, Coding). Der Agent soll hier unterstützen mit Erinnerungen.
+
+## Sport & Gesundheit — AKTUELL EINGESCHRÄNKT
+
+WICHTIG: Momentan kein Kraftsport erlaubt, mindestens 6 Wochen.
+Erlaubte Aktivitäten:
+- Entspannt Fahrrad fahren
+- Spazieren gehen
+- Zuhause Dehnen
+- Plattfuß-Übungen (wichtig für Knie und Schienbeinschmerzen)
+
+Hat einen Plattfuß und dadurch Schienbeinschmerzen. Möchte gezielt Übungen machen die gut sind für: Plattfuß, Knie, Schienbein.
+
+Langfristiger Wunsch: BJJ (Brazilian Jiu-Jitsu) ausprobieren, sobald er wieder Sport machen darf.
+Früher: Kettlebell Training zuhause, Kraft- und Functional Training.
+
+## Familie
+
+Verheiratet. Abende und Wochenenden gehören der Frau/Familie.
+Gemeinsames Kochen ist ein wichtiger Teil des Abends (abwechselnd wer kocht).
+Eltern werden meistens am Sonntag besucht (Djamal und seine Frau zusammen).
+Wochenende: Morgens produktiv, nachmittags Familie.
+
+## Religion — Islam
+
+Muslim. Möchte am Wochenende (Samstag oder Sonntag) Koran lesen.
+Am besten als fester Slot, z.B. Samstag- oder Sonntagmorgen.
+Fajr-Gebet schafft er bisher oft nicht, aber es ist ein Ziel.
+
+## Produktivität & Persönlichkeit
+
+Versinkt gerne in Produktivität, kann schwer entspannen.
+Fällt abends in Rabbit Holes am Handy (YouTube, Coding, Recherche).
+Braucht keine bewusste Erholungszeit — Erholung = Sport oder aktiv sein.
+Analysiert Entscheidungen sehr bewusst, denkt langfristig.
+Will ehrliche, direkte Antworten, kein Sugarcoating.
+Maximal 2 Fokusthemen pro Tag, sonst verzettelt er sich.
+
+## Haushalt
+
+Aufräumen und Haushalt muss eingeplant werden.
+Einkaufen: Sporadisch, oft und wenig auf einmal (kleine Küche, kein großer Wocheneinkauf).
+Läuft spontan gut, muss nicht fest eingeplant werden.
+
+## Aktuelle Projekte (neben BMW Vorbereitung)
+
+1. Life OS Agent — persönlicher KI-Assistent (Python, LangGraph, Groq, Telegram, RAG, Google Calendar)
+2. KI-Wissen erweitern — Videos, Tutorials, Paper (das ist gleichzeitig BMW-Vorbereitung, aber soll nicht als Druck wirken)
+
+## Technischer Hintergrund
+
+Master Elektrotechnik, Erfahrung mit:
+Python, ROS2, Linux, ADAS, Robotik, Pinocchio, TF2, 3D-Kinematik.
+Vibe Coding Erfahrung, neu bei AI Agenten.
+Laptop: ASUS ZenBook UX431DA (AMD Ryzen 5, 8-16GB RAM, AMD Vega 8 GPU).
