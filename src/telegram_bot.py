@@ -1,6 +1,7 @@
 """Telegram bot frontend for the Life OS Agent. Replies are always in German."""
 import asyncio
 import json
+import logging
 import os
 import subprocess
 from datetime import date, datetime, timedelta
@@ -8,6 +9,7 @@ from functools import partial
 
 from dotenv import load_dotenv
 from telegram import Update
+from telegram.error import NetworkError, TimedOut
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -325,7 +327,7 @@ async def _handle_chat(update: Update, chat_id: str, text: str) -> None:
     history = chat_histories.setdefault(chat_id, [])
     connected = calendar_service.is_connected()
 
-    context_text = await _run_sync(rag.search, text)
+    context_text = await _run_sync(partial(rag.search, text, k=2))
     system_content = (
         "Du bist Djamals persönlicher Life OS Agent. Antworte auf Deutsch, freundlich und prägnant. "
         f"Heute ist {datetime.now().strftime('%A, %d.%m.%Y')}."
@@ -335,20 +337,16 @@ async def _handle_chat(update: Update, chat_id: str, text: str) -> None:
 
     if connected:
         try:
-            events = await _run_sync(calendar_service.get_upcoming_events, 10)
+            events = await _run_sync(calendar_service.get_upcoming_events, 7)
             calendar_text = calendar_service.format_events_summary(events)
         except calendar_service.CalendarError:
             calendar_text = "Kalender konnte nicht gelesen werden."
         system_content += (
-            "\n\nDjamals Termine der nächsten 10 Tage:\n"
+            "\n\nTermine der nächsten 7 Tage:\n"
             f"{calendar_text}\n\n"
-            "Du kannst Termine über deine Tools verwalten: list_events (immer zuerst, um Referenzen "
-            "zu bekommen), create_event, move_event, delete_event. WICHTIG als Sicherheitsregel: Du "
-            "darfst ausschließlich Termine ändern oder löschen, die vom Agent erstellt wurden "
-            "(in list_events entsprechend markiert). Termine, die Djamal selbst angelegt hat, sind "
-            "tabu – sag ihm in dem Fall, dass er sie selbst anpassen muss. Vor jedem Erstellen oder "
-            "Verschieben prüfen die Tools automatisch auf Überschneidungen; bei einem Konflikt nichts "
-            "erzwingen, sondern Djamal eine freie Alternative vorschlagen."
+            "Verwalte Termine mit deinen Tools (list_events zuerst für Referenzen). "
+            "Sicherheitsregel: Nur vom Agent erstellte Termine ändern/löschen; eigene Termine "
+            "von Djamal sind tabu. Bei Konflikten keine Alternative erzwingen, sondern vorschlagen."
         )
 
     messages = [{"role": "system", "content": system_content}]
@@ -385,6 +383,10 @@ async def _handle_chat(update: Update, chat_id: str, text: str) -> None:
                     try:
                         args = json.loads(tc.function.arguments or "{}")
                     except json.JSONDecodeError:
+                        args = {}
+                    # The model sometimes emits arguments as the literal `null`
+                    # (or a non-object), which json.loads turns into None/str.
+                    if not isinstance(args, dict):
                         args = {}
                     result = await _run_sync(
                         calendar_tools.execute_tool, tc.function.name, args, ref_map
@@ -450,7 +452,31 @@ async def voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ── App setup ──
 
+log = logging.getLogger(__name__)
+
+
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Catch-all so handler exceptions and transient network blips don't crash the bot."""
+    err = context.error
+    # Bad Gateway / timeouts on long-polling are transient; PTB retries automatically.
+    if isinstance(err, (NetworkError, TimedOut)):
+        log.warning("Transient Telegram network error: %s", err)
+        return
+
+    log.exception("Unhandled exception while processing update", exc_info=err)
+    if isinstance(update, Update) and update.effective_message:
+        try:
+            await update.effective_message.reply_text(
+                "❌ Da ist etwas schiefgelaufen. Versuch es bitte nochmal."
+            )
+        except Exception:
+            pass
+
+
 def main():
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO
+    )
     app = ApplicationBuilder().token(os.environ["TELEGRAM_TOKEN"]).build()
 
     # Runs first for every update so reminders always have an up-to-date chat list.
@@ -466,6 +492,8 @@ def main():
     app.add_handler(CommandHandler("merke", merke))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(MessageHandler(filters.VOICE, voice))
+
+    app.add_error_handler(error_handler)
 
     reminders.register(app.job_queue)
 

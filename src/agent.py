@@ -1,13 +1,43 @@
 """Shared Groq LLM client and chat helpers used across the agent."""
 import os
 import re
+import time
 import uuid
 from types import SimpleNamespace
 
-from groq import Groq, GroqError
+from groq import Groq, GroqError, RateLimitError
 
 DEFAULT_MODEL = "llama-3.3-70b-versatile"
 WHISPER_MODEL = "whisper-large-v3"
+
+# Groq's free tier has a low tokens-per-minute limit, so a couple of requests in
+# quick succession can return 429. Retry a few times with backoff before failing.
+_MAX_RETRIES = 4
+
+
+def _retry_after_seconds(error: RateLimitError) -> float:
+    """Best-effort delay from a rate-limit error's Retry-After header."""
+    try:
+        value = error.response.headers.get("retry-after")
+        if value:
+            return min(float(value), 10.0)
+    except (AttributeError, ValueError):
+        pass
+    return 2.0
+
+
+def _call_with_retry(fn):
+    """Run a Groq SDK call, retrying on 429 rate-limit errors with backoff."""
+    delay = 1.0
+    for attempt in range(_MAX_RETRIES):
+        try:
+            return fn()
+        except RateLimitError as e:
+            if attempt == _MAX_RETRIES - 1:
+                raise
+            wait = max(_retry_after_seconds(e), delay)
+            time.sleep(wait)
+            delay *= 2
 
 # Llama on Groq occasionally emits tool calls as plain text in the form
 # `<function=name{json args}</function>` instead of the structured tool_calls
@@ -44,7 +74,7 @@ def chat(messages: list, model: str = DEFAULT_MODEL, temperature: float = 0.7, j
         kwargs["response_format"] = {"type": "json_object"}
 
     try:
-        response = client.chat.completions.create(**kwargs)
+        response = _call_with_retry(lambda: client.chat.completions.create(**kwargs))
     except GroqError as e:
         raise LLMError(f"Groq API Fehler: {e}") from e
 
@@ -89,13 +119,13 @@ def chat_with_tools(messages: list, tools: list, model: str = DEFAULT_MODEL, tem
     client = get_client()
 
     try:
-        response = client.chat.completions.create(
+        response = _call_with_retry(lambda: client.chat.completions.create(
             model=model,
             messages=messages,
             temperature=temperature,
             tools=tools,
             tool_choice="auto",
-        )
+        ))
     except GroqError as e:
         recovered = _recover_tool_calls_from_error(e)
         if recovered is not None:
@@ -111,11 +141,11 @@ def transcribe_audio(file_path: str, language: str = "de") -> str:
 
     try:
         with open(file_path, "rb") as f:
-            transcription = client.audio.transcriptions.create(
+            transcription = _call_with_retry(lambda: client.audio.transcriptions.create(
                 model=WHISPER_MODEL,
                 file=f,
                 language=language,
-            )
+            ))
     except GroqError as e:
         raise LLMError(f"Groq Transkriptions-Fehler: {e}") from e
     except OSError as e:

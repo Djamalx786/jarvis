@@ -21,11 +21,8 @@ TOOLS = [
         "function": {
             "name": "list_events",
             "description": (
-                "Listet Djamals Kalendertermine der nächsten Tage auf. Jeder Termin bekommt eine "
-                "kurze Referenz (z. B. 'evt1'), die du für move_event und delete_event verwendest. "
-                "Außerdem wird markiert, welche Termine vom Agent erstellt wurden – nur diese darfst "
-                "du ändern oder löschen. Rufe dieses Tool IMMER zuerst auf, bevor du etwas verschiebst "
-                "oder löschst, um die richtige Referenz zu erhalten."
+                "Listet Termine auf und liefert je Termin eine Referenz (z. B. 'evt1'). "
+                "Immer zuerst aufrufen, bevor du etwas verschiebst oder löschst."
             ),
             "parameters": {
                 "type": "object",
@@ -42,10 +39,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "create_event",
-            "description": (
-                "Erstellt einen neuen Termin. Prüft vorher automatisch auf Überlappungen mit "
-                "bestehenden Terminen und legt NICHTS an, wenn es einen Konflikt gibt."
-            ),
+            "description": "Erstellt einen Termin. Bei Überlappung wird nichts angelegt.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -64,9 +58,8 @@ TOOLS = [
         "function": {
             "name": "move_event",
             "description": (
-                "Verschiebt bzw. ändert die Zeit eines vom Agent erstellten Termins (per Referenz aus "
-                "list_events). Prüft vorher auf Überlappungen und verschiebt NICHT, wenn es einen "
-                "Konflikt gibt. Funktioniert nur für Agent-eigene Termine."
+                "Ändert Datum/Zeit eines Agent-Termins (per Referenz). Nur Agent-eigene Termine; "
+                "bei Überlappung wird nicht verschoben."
             ),
             "parameters": {
                 "type": "object",
@@ -84,10 +77,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "delete_event",
-            "description": (
-                "Löscht einen vom Agent erstellten Termin (per Referenz aus list_events). "
-                "Funktioniert nur für Agent-eigene Termine."
-            ),
+            "description": "Löscht einen Agent-Termin (per Referenz). Nur Agent-eigene Termine.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -126,6 +116,8 @@ def execute_tool(name: str, args: dict, ref_map: dict) -> str:
     ref_map is a per-conversation dict mapping short references to real event ids;
     list_events populates it, move/delete_event resolve through it.
     """
+    if not isinstance(args, dict):
+        args = {}
     try:
         if name == "list_events":
             days = int(args.get("days_ahead") or 14)
