@@ -20,7 +20,7 @@ from telegram.ext import (
 )
 from langgraph.types import Command
 
-from src import calendar_service, calendar_tools, rag, reminders
+from src import calendar_service, calendar_tools, rag, reminders, scheduler
 from src.agent import LLMError, chat as groq_chat, chat_with_tools as agent_chat_with_tools, transcribe_audio
 from src.graph import build_graph
 from src.startup import prepare_runtime
@@ -45,9 +45,12 @@ HELP_TEXT = (
     "/connect – Verbindet dein Google Calendar Konto\n"
     "/status – Zeigt Verbindungsstatus, letzten Plan und Wissensbasis\n"
     "/merke <Text> – Merkt sich eine Notiz für künftige Pläne, z. B. `/merke Ich brauche mehr Pufferzeit am Montag`\n"
+    "/checkin – Startet sofort einen Abend-Check-in (sonst automatisch um 21:45)\n"
+    "/scheduler_status – Zeigt, wann die nächsten proaktiven Nachrichten kommen\n"
     "/help – Diese Übersicht\n\n"
-    "Ich melde mich auch von selbst: Morgens mit deiner Tagesübersicht, vor dem Abendessen "
-    "für deine Plattfuß-Übungen, freitags zum Wochenend-Start und abends als Handy-weg-Erinnerung.\n\n"
+    "Ich melde mich auch von selbst: morgens (Mo–Fr 07:00) mit deinen 3 Prioritäten, "
+    "abends (21:45) zum Abschalten mit einer kurzen Tagesfrage und sonntags (19:00) zum "
+    "Wochenrückblick. Was du abends/sonntags antwortest, fließt in deine nächsten Pläne ein.\n\n"
     "Du kannst mir auch einfach schreiben oder eine Sprachnachricht senden – z. B. "
     "_„Hab ich Mittwoch was vor?“_, _„Verschieb mein Training am Dienstag auf 18 Uhr“_ "
     "oder _„Lösch den Termin am Freitagvormittag“_. Ich verwalte dabei nur Termine, die "
@@ -106,6 +109,8 @@ async def track_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 # ── Commands ──
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Remember where to send the proactive morning/evening/weekly messages.
+    scheduler.save_chat_id(update.message.chat_id)
     await update.message.reply_text(
         "Hallo Djamal! 👋\n\nIch bin dein Life OS Agent.\nSchreib /help für eine Übersicht aller Befehle."
     )
@@ -254,6 +259,15 @@ async def merke(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = " ".join(context.args)
     await _run_sync(rag.add_to_memory, f"Notiz von Djamal: {text}")
     await update.message.reply_text(f"📝 Gemerkt: {text}")
+
+
+async def checkin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Manually trigger an evening check-in (handy for testing without waiting for 21:45)."""
+    await scheduler.trigger_evening_checkin(context.bot, update.message.chat_id)
+
+
+async def scheduler_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(scheduler.status_text())
 
 
 # ── Plan approval / feedback flow ──
@@ -416,6 +430,9 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE, text: 
 
     if chat_id in pending_oauth:
         await _handle_oauth_code(update, chat_id, user_text)
+    elif chat_id in scheduler.pending_checkins:
+        # Reply to an evening/weekly check-in → feed it into the feedback loop.
+        await scheduler.handle_checkin_reply(context.bot, chat_id, user_text)
     elif chat_id in pending_plans:
         await _handle_plan_feedback(update, chat_id, user_text)
     else:
@@ -477,7 +494,15 @@ def main():
     logging.basicConfig(
         format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO
     )
-    app = ApplicationBuilder().token(os.environ["TELEGRAM_TOKEN"]).build()
+    app = (
+        ApplicationBuilder()
+        .token(os.environ["TELEGRAM_TOKEN"])
+        # Start/stop the proactive scheduler inside run_polling()'s event loop so it
+        # reinitializes cleanly on every (re)start and shuts down without lingering jobs.
+        .post_init(scheduler.start)
+        .post_shutdown(scheduler.shutdown)
+        .build()
+    )
 
     # Runs first for every update so reminders always have an up-to-date chat list.
     app.add_handler(TypeHandler(Update, track_chat), group=-1)
@@ -490,6 +515,8 @@ def main():
     app.add_handler(CommandHandler("connect", connect))
     app.add_handler(CommandHandler("status", status))
     app.add_handler(CommandHandler("merke", merke))
+    app.add_handler(CommandHandler("checkin", checkin))
+    app.add_handler(CommandHandler("scheduler_status", scheduler_status))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_handler(MessageHandler(filters.VOICE, voice))
 

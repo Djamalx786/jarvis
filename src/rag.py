@@ -63,6 +63,20 @@ def add_to_memory(entry: str) -> None:
     build_db()
 
 
+def add_feedback_entry(text: str) -> None:
+    """Add a single feedback line to the live Chroma collection without rebuilding.
+
+    Used by the daily feedback loop: the caller also persists ``text`` to
+    feedback_history.txt, so a future full rebuild keeps it. This makes the entry
+    searchable immediately and is far cheaper than re-indexing every note. Never raises.
+    """
+    try:
+        db = get_db()
+        db.add_texts([text])
+    except Exception as e:
+        print(f"RAG add_feedback_entry failed: {e}")
+
+
 def get_doc_count() -> int:
     """Return the number of chunks stored in the RAG knowledge base. Returns 0 on error."""
     try:

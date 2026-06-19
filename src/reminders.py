@@ -5,12 +5,10 @@ Registered on the bot's JobQueue in ``telegram_bot.main()``. Every job broadcast
 all chat_ids that have interacted with the bot (persisted in ``data/state.json`` under
 ``chat_ids``). All times are Europe/Berlin.
 
-Jobs:
-- Morning briefing  : weekdays 06:05, weekend 08:30 — today's calendar + a gentle nudge.
-- Movement reminder  : Mon/Wed/Thu 17:45 — Plattfuß-Übungen & Dehnen before dinner.
-- Friday wind-down   : Fri 17:30 — protect the free Friday evening.
-- Wind-down / detox  : daily 22:45 — phone away, sleep.
-- Weekly plan nudge  : Sun 19:30 — offer to build next week's plan.
+Jobs (the interactive morning/evening/weekly touchpoints live in src/scheduler.py):
+- Weekend briefing  : Sat/Sun 08:30 — today's calendar + a gentle nudge.
+- Movement reminder : Mon/Wed/Thu 17:45 — Plattfuß-Übungen & Dehnen before dinner.
+- Friday wind-down  : Fri 17:30 — protect the free Friday evening.
 """
 import asyncio
 import json
@@ -94,26 +92,13 @@ async def friday_winddown(context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
-async def winddown_reminder(context: ContextTypes.DEFAULT_TYPE) -> None:
-    await _broadcast(
-        context,
-        "🌙 Gleich Handy weglegen – 15 Min ohne Bildschirm vor dem Schlafen. "
-        "Nicht ins Rabbit Hole rutschen. Gute Nacht! 😴",
-    )
-
-
-async def weekly_plan_nudge(context: ContextTypes.DEFAULT_TYPE) -> None:
-    await _broadcast(
-        context,
-        "🗓 Eine neue Woche steht an. Soll ich deinen Wochenplan erstellen? Schick mir einfach /plan.",
-    )
-
-
 def register(job_queue) -> None:
-    """Register all recurring reminder jobs on the given JobQueue."""
-    job_queue.run_daily(morning_briefing, time=time(6, 5, tzinfo=TZ), days=WEEKDAYS, name="briefing_weekday")
+    """Register the simple one-way nudges on the given JobQueue.
+
+    The interactive proactive touchpoints (weekday morning briefing, evening wind-down,
+    Sunday weekly reflection) now live in ``src/scheduler.py`` with their feedback loop;
+    only the non-overlapping nudges remain here so the user is never double-messaged.
+    """
     job_queue.run_daily(morning_briefing, time=time(8, 30, tzinfo=TZ), days=WEEKEND, name="briefing_weekend")
     job_queue.run_daily(movement_reminder, time=time(17, 45, tzinfo=TZ), days=(MON, WED, THU), name="movement")
     job_queue.run_daily(friday_winddown, time=time(17, 30, tzinfo=TZ), days=(FRI,), name="friday_winddown")
-    job_queue.run_daily(winddown_reminder, time=time(22, 45, tzinfo=TZ), name="winddown")
-    job_queue.run_daily(weekly_plan_nudge, time=time(19, 30, tzinfo=TZ), days=(SUN,), name="weekly_plan_nudge")

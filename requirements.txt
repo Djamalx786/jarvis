@@ -19,6 +19,9 @@ groq==1.4.0
 # Telegram bot (job-queue extra pulls in APScheduler for proactive reminders)
 python-telegram-bot[job-queue]==22.7
 
+# Proactive daily scheduler (src/scheduler.py imports it directly)
+apscheduler==3.11.2
+
 # PDF export
 weasyprint==69.0
 
